@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import * as React from "react"
 
 import type {
@@ -15,14 +16,12 @@ type ToasterToast = ToastProps & {
   action?: ToastActionElement
 }
 
-export const actionTypes = {
+const actionTypes = {
   ADD_TOAST: "ADD_TOAST",
   UPDATE_TOAST: "UPDATE_TOAST",
   DISMISS_TOAST: "DISMISS_TOAST",
   REMOVE_TOAST: "REMOVE_TOAST",
 } as const
-
-export type ActionType = typeof actionTypes
 
 let count = 0
 
@@ -30,6 +29,8 @@ function genId() {
   count = (count + 1) % Number.MAX_VALUE
   return count.toString()
 }
+
+type ActionType = typeof actionTypes
 
 type Action =
   | {
