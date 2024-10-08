@@ -12,6 +12,7 @@ import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
 import { Slider } from "@/components/ui/slider"
 import { Switch } from "@/components/ui/switch"
+import { ThemeToggle } from "@/components/ui/theme-toggle"
 import {
   Select,
   SelectContent,
@@ -244,9 +245,9 @@ export function ColorMagicComponent() {
 
   return (
     <ToastProvider>
-      <div className="min-h-screen bg-gray-900 text-white">
-        <header className="bg-gray-800 py-4">
-          <div className="container mx-auto px-4 flex items-center justify-center space-x-2">
+      <div className="min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white">
+        <header className="bg-white dark:bg-gray-800 py-4 shadow-md">
+          <div className="container mx-auto px-4 flex items-center justify-between">
             <h1 className="text-3xl font-bold flex items-center">
               <WandSparkles className="w-8 h-8 mr-2 inline-block text-emerald-500"  />
               <span className="bg-gradient-to-r from-emerald-500 to-sky-500 text-transparent bg-clip-text">
@@ -254,22 +255,32 @@ export function ColorMagicComponent() {
               </span>
               <Paintbrush className="w-8 h-8 ml-2 inline-block text-sky-500" />
             </h1>
+            <ThemeToggle />
           </div>
         </header>
         
         <main className="container mx-auto px-4 py-8">
-          <Tabs defaultValue="gradient" className="space-y-4 font-mono">
-            <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="gradient" className='font-semibold'>Gradient Generator</TabsTrigger>
-              <TabsTrigger value="palette" className='font-semibold'>Palette Generator</TabsTrigger>
+          <Tabs defaultValue="gradient" className="w-full">
+            <TabsList className="grid w-full grid-cols-2 bg-gray-100 rounded-lg p-0.5 border border-gray-200">
+              <TabsTrigger 
+                value="gradient" 
+                className="rounded-md py-1.5 px-2 font-semibold text-sm text-gray-600 data-[state=active]:bg-white data-[state=active]:text-gray-900 data-[state=active]:shadow-sm transition-all flex items-center justify-center h-8"
+              >
+                Gradient
+              </TabsTrigger>
+              <TabsTrigger 
+                value="palette" 
+                className="rounded-md py-1.5 px-2 font-semibold text-sm text-gray-600 data-[state=active]:bg-white data-[state=active]:text-gray-900 data-[state=active]:shadow-sm transition-all flex items-center justify-center h-8"
+              >
+                Palette
+              </TabsTrigger>
             </TabsList>
-
-            <TabsContent value="gradient" className="space-y-4">
+            <TabsContent value="gradient" className="mt-6 bg-white dark:bg-gray-800 rounded-lg p-6 shadow-md">
               <div className="h-40 rounded-lg" style={gradientStyle}></div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-4">
-                  <Label>Colors</Label>
+                  <Label htmlFor="gradient-colors" className="block font-semibold mt-4 mb-2">Colors</Label>
                   {gradientColors.map((color, index) => (
                     <div key={index} className="flex items-center space-x-2">
                       <Input
@@ -282,21 +293,21 @@ export function ColorMagicComponent() {
                         type="text"
                         value={color}
                         onChange={(e) => updateGradientColor(index, e.target.value)}
-                        className="flex-grow bg-gray-800 text-white"
+                        className="flex-grow bg-white dark:bg-gray-800 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-700"
                       />
                       <Slider
                         value={[stops[index]]}
                         onValueChange={(value) => updateStop(index, value[0])}
                         max={100}
                         step={1}
-                        className="w-24"
+                        className="w-24 cursor-pointer hover:scale-105 transition-all duration-300"
                       />
                       {gradientColors.length > 2 && (
                         <Button
                           variant="ghost"
                           size="icon"
                           onClick={() => removeGradientColor(index)}
-                          className="text-red-500 bg-white p-3 rounded hover:text-red-400"
+                          className="text-red-500 bg-white p-3 rounded hover:text-crimson hover:scale-105 transition-all duration-300"
                         >
                           <Minus className="h-4 w-4" />
                         </Button>
@@ -304,7 +315,10 @@ export function ColorMagicComponent() {
                     </div>
                   ))}
                   {gradientColors.length < 5 && (
-                    <Button onClick={addGradientColor} variant="outline" className="w-full bg-white text-gray-900">
+                    <Button 
+                      onClick={addGradientColor} 
+                      className="w-full flex items-center justify-center bg-white text-gray-900 hover:bg-gray-100 hover:text-gray-900 border border-gray-300 transition-colors duration-200"
+                    >
                       <Plus className="h-4 w-4 mr-2" />
                       Add Color
                     </Button>
@@ -313,12 +327,12 @@ export function ColorMagicComponent() {
 
                 <div className="space-y-4">
                   <div className="space-y-2">
-                    <Label htmlFor="gradient-type">Gradient Type</Label>
+                    <Label htmlFor="gradient-type" className="block font-semibold mt-4 mb-2">Gradient Type</Label>
                     <Select value={gradientType} onValueChange={setGradientType}>
-                      <SelectTrigger id="gradient-type" className="bg-gray-800 text-white">
+                      <SelectTrigger id="gradient-type" className="bg-white dark:bg-gray-800 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-700">
                         <SelectValue placeholder="Select gradient type" />
                       </SelectTrigger>
-                      <SelectContent>
+                      <SelectContent className="bg-white dark:bg-gray-800 text-gray-900 dark:text-white">
                         <SelectItem value="linear">Linear</SelectItem>
                         <SelectItem value="radial">Radial</SelectItem>
                       </SelectContent>
@@ -336,16 +350,17 @@ export function ColorMagicComponent() {
                           onChange={(e) => setAngle(Number(e.target.value))}
                           min="0"
                           max="360"
-                          className="bg-gray-800 text-white w-20"
+                          className="bg-white dark:bg-gray-800 text-gray-900 dark:text-white w-20 border border-gray-300 dark:border-gray-700"
                         />
-                        <div className="relative w-full h-2 bg-gray-300 rounded-full">
+                        <div className="relative w-full h-2 bg-gray-300 rounded-full ">
                           <Slider
                             value={[angle]}
                             onValueChange={(value) => setAngle(value[0])}
                             max={360}
                             step={1}
-                            className="absolute inset-0"
+                            className="absolute inset-0 cursor-pointer "
                             style={{
+                              
                               // Estilos para el track del slider
                               '--slider-track-background': '#D1D5DB', // Gris claro
                               '--slider-range-background': '#f4f4f4 ', // Gris claro para la parte activa
@@ -356,26 +371,38 @@ export function ColorMagicComponent() {
                     </div>
                   )}
 
-                  <div className="flex items-center space-x-2">
+                  <div className="flex items-center space-x-2 mt-4">
                     <Switch
-                      id="repeating"
+                      id="repeating-gradient"
                       checked={isRepeating}
                       onCheckedChange={setIsRepeating}
-                    />
-                    <Label htmlFor="repeating">Repeating Gradient</Label>
+                      className="relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-white focus:outline-none"
+                      style={{
+                        backgroundColor: isRepeating ? 'rgb(16, 185, 129)' : 'rgb(229, 231, 235)'
+                      }}
+                    >
+                      <span
+                        className={`${
+                          isRepeating ? 'translate-x-6' : 'translate-x-1'
+                        } inline-block h-4 w-4 transform rounded-full bg-white transition-transform`}
+                      />
+                    </Switch>
+                    <Label htmlFor="repeating-gradient" className="font-semibold text-sm">
+                      Repeating Gradient
+                    </Label>
                   </div>
                 </div>
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="css-output">CSS Output</Label>
+                <Label htmlFor="css-output" className="block font-semibold mt-6 mb-2">CSS Output</Label>
                 <div className="flex space-x-2">
                   <Input id="css-output"
                     value={gradientCSS}
                     readOnly
-                    className="flex-grow bg-gray-800 text-white"
+                    className="flex-grow bg-white dark:bg-gray-800 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-100"
                   />
-                  <Button onClick={copyGradientCSS} className="flex items-center bg-white text-gray-900 hover:bg-gray-200">
+                  <Button onClick={copyGradientCSS} className="flex items-center justify-center bg-white text-gray-900 hover:bg-gray-100 hover:text-gray-900 border border-gray-300 transition-colors duration-200">
                     <Copy className="w-4 h-4 mr-2" />
                     Copy CSS
                   </Button>
@@ -383,27 +410,30 @@ export function ColorMagicComponent() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="tailwind-output">Tailwind Output</Label>
+                <Label htmlFor="tailwind-output" className="block font-semibold mt-6 mb-2">Tailwind Output</Label>
                 <div className="flex space-x-2">
                   <Input id="tailwind-output"
                     value={gradientTailwind}
                     readOnly
-                    className="flex-grow bg-gray-800 text-white"
+                    className="flex-grow bg-white dark:bg-gray-800 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-100"
                   />
-                  <Button onClick={copyGradientTailwind} className="flex items-center bg-white text-gray-900 hover:bg-gray-100">
+                  <Button onClick={copyGradientTailwind} className="flex items-center justify-center bg-white text-gray-900 hover:bg-gray-100 hover:text-gray-900 border border-gray-300 transition-colors duration-200">
                     <Copy className="w-4 h-4 mr-2" />
                     Copy Tailwind
                   </Button>
                 </div>
               </div>
 
-              <Button onClick={randomizeGradient} variant="outline" className="w-full flex items-center justify-center bg-white text-gray-900">
-                <RefreshCw className="w-4 h-4 mr-2" />
+              <Button 
+                onClick={randomizeGradient} 
+                className="w-full flex items-center justify-center bg-white text-gray-900 hover:bg-gray-100 hover:text-gray-900 border border-gray-300 py-3 px-4 group transition-colors duration-200 mt-4"
+              >
+                <RefreshCw className="w-5 h-5 mr-2 group-hover:text-emerald-500 group-hover:animate-spin transition-all duration-300" />
                 Randomize Gradient
               </Button>
             </TabsContent>
 
-            <TabsContent value="palette" className="space-y-4">
+            <TabsContent value="palette" className="mt-6 bg-white dark:bg-gray-800 rounded-lg p-6 shadow-md">
               <div className="space-y-4">
                 <div className="flex flex-col space-y-2">
                   <Label>Base Colors</Label>
@@ -419,14 +449,14 @@ export function ColorMagicComponent() {
                         type="text"
                         value={color}
                         onChange={(e) => updateBaseColor(index, e.target.value)}
-                        className="flex-grow bg-gray-800 text-white"
+                        className="flex-grow bg-white dark:bg-gray-800 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-700"
                       />
                       {baseColors.length > 1 && (
                         <Button
                           variant="ghost"
                           size="icon"
                           onClick={() => removeBaseColor(index)}
-                          className="text-red-500 hover:text-red-400 bg-white p-3 rounded hover:bg-gray-200"
+                          className="text-red-500 hover:text-red-600 bg-white hover:bg-gray-100 rounded-full p-2 transition-all duration-300"
                         >
                           <Minus className="h-4 w-4" />
                         </Button>
@@ -434,19 +464,22 @@ export function ColorMagicComponent() {
                     </div>
                   ))}
                   {baseColors.length < 5 && (
-                    <Button onClick={addBaseColor} variant="outline" className="w-full bg-white text-gray-900">
+                    <Button 
+                      onClick={addBaseColor} 
+                      className="w-full flex items-center justify-center bg-white text-gray-900 hover:bg-gray-100 hover:text-gray-900 border border-gray-300 transition-colors duration-200"
+                    >
                       <Plus className="h-4 w-4 mr-2" />
-                      Add Base Color
+                      Add Color
                     </Button>
                   )}
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="palette-type">Palette Type</Label>
                   <Select value={paletteType} onValueChange={setPaletteType}>
-                    <SelectTrigger id="palette-type" className="bg-gray-800 text-white">
+                    <SelectTrigger id="palette-type" className="bg-white dark:bg-gray-800 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-700">
                       <SelectValue placeholder="Select palette type" />
                     </SelectTrigger>
-                    <SelectContent>
+                    <SelectContent className="bg-white dark:bg-gray-800 text-gray-900 dark:text-white">
                       <SelectItem value="monochromatic">Monochromatic</SelectItem>
                       <SelectItem value="analogous">Analogous</SelectItem>
                       <SelectItem value="complementary">Complementary</SelectItem>
@@ -454,7 +487,12 @@ export function ColorMagicComponent() {
                     </SelectContent>
                   </Select>
                 </div>
-                <Button onClick={() => generatePalette()} className="w-full bg-white text-gray-900 hover:bg-gray-100">Generate Palette</Button>
+                <Button 
+                  onClick={() => generatePalette()} 
+                  className="w-full bg-white text-gray-900 hover:bg-gray-100 hover:text-gray-900 border border-gray-300 transition-colors duration-200 mb-6"
+                >
+                  Generate Palette
+                </Button>
                 <div className="space-y-4">
                   {paletteColors.map((palette, index) => (
                     <div key={index} className="grid grid-cols-5 gap-2">
@@ -464,7 +502,7 @@ export function ColorMagicComponent() {
                             className="w-16 h-16 rounded-full"
                             style={{ backgroundColor: color }}
                           ></div>
-                          <span className="mt-1 text-xs">{color}</span>
+                          <span className="mt-1 text-xs text-gray-700 dark:text-gray-300">{color}</span>
                         </div>
                       ))}
                     </div>
