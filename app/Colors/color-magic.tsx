@@ -31,18 +31,18 @@ export function ColorMagicComponent() {
   const { toast } = useToast()
 
   // Gradient state
-  const [gradientColors, setGradientColors] = useState(['#3498db', '#e74c3c'])
+  const [gradientColors, setGradientColors] = useState(['#10b981', '#0ea5e9'])
   const [gradientType, setGradientType] = useState('linear')
   const [angle, setAngle] = useState(90)
   const [stops, setStops] = useState([0, 100])
   const [isRepeating, setIsRepeating] = useState(false)
 
   // Enhanced Palette state
-  const [baseColors, setBaseColors] = useState(['#3498db', '#e74c3c'])
+  const [baseColors, setBaseColors] = useState(['#10b981', '#0ea5e9'])
   const [paletteType, setPaletteType] = useState('monochromatic')
   const [paletteColors, setPaletteColors] = useState([
-    ['#3498db', '#2980b9', '#1abc9c', '#16a085', '#2ecc71'],
-    ['#e74c3c', '#c0392b', '#e67e22', '#d35400', '#f39c12']
+    ['#10b981', '#2980b9', '#1abc9c', '#16a085', '#2ecc71'],
+    ['#0ea5e9', '#c0392b', '#e67e22', '#d35400', '#f39c12']
   ])
 
   // Gradient functions

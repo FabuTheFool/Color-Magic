@@ -78,3 +78,8 @@ body {
     @apply bg-background text-foreground;
   }
 }
+@layer components {
+  .bg-emerald-sky-gradient {
+    background: linear-gradient(to right, #10B981, #0EA5E9);
+  }
+}
