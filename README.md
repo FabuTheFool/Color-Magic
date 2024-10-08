@@ -86,7 +86,7 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 ## 📬 Contact
 
-Your Name - [@your_twitter](https://twitter.com/your_twitter) - email@example.com
+fabrizio - [@FabuTheFool](https://github.com/FabuTheFool/) - 
 
 Project Link: [https://github.com/FabuTheFool/Color-Magic](https://github.com/FabuTheFool/Color-Magic)
 
