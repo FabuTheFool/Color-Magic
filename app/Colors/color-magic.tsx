@@ -6,7 +6,7 @@
 import { useState, useCallback } from 'react'
 import { useToast } from "@/components/ui/use-toast"
 import { ToastProvider, ToastViewport } from "@/components/ui/toast"
-import { Paintbrush, Plus, Minus, Copy, RefreshCw } from 'lucide-react'
+import { Paintbrush, Plus, Minus, Copy, RefreshCw ,WandSparkles } from 'lucide-react'
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
@@ -246,14 +246,17 @@ export function ColorMagicComponent() {
     <ToastProvider>
       <div className="min-h-screen bg-gray-900 text-white">
         <header className="bg-gray-800 py-4">
-          <div className="container mx-auto px-4">
-            <h1 className="text-2xl font-bold flex items-center font-mono">
-              <Paintbrush className="w-6 h-6 mr-2 " />
-              Color Magic
+          <div className="container mx-auto px-4 flex items-center justify-center space-x-2">
+            <h1 className="text-3xl font-bold flex items-center">
+              <WandSparkles className="w-8 h-8 mr-2 inline-block text-emerald-500"  />
+              <span className="bg-gradient-to-r from-emerald-500 to-sky-500 text-transparent bg-clip-text">
+                Color Magic
+              </span>
+              <Paintbrush className="w-8 h-8 ml-2 inline-block text-sky-500" />
             </h1>
           </div>
         </header>
-
+        
         <main className="container mx-auto px-4 py-8">
           <Tabs defaultValue="gradient" className="space-y-4 font-mono">
             <TabsList className="grid w-full grid-cols-2">
