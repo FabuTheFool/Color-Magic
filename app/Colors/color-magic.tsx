@@ -245,8 +245,8 @@ export function ColorMagicComponent() {
 
   return (
     <ToastProvider>
-      <div className="min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white">
-        <header className="bg-white dark:bg-gray-800 py-4 shadow-md">
+      <div className="min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white font-mono text-center">
+        <header className="bg-white dark:bg-gray-800 py-4 shadow-md ">
           <div className="container mx-auto px-4 flex items-center justify-between">
             <h1 className="text-3xl font-bold flex items-center">
               <WandSparkles className="w-8 h-8 mr-2 inline-block text-emerald-500"  />
