@@ -85,10 +85,11 @@ export function ColorMagicComponent() {
   }, ${gradientColors.map((color, index) => `${color} ${stops[index]}%`).join(', ')});`
 
   const gradientTailwind = useCallback(() => {
+    const colorStops = gradientColors.map((color, index) => `${color} ${stops[index]}%`).join(',')
     if (gradientType === 'linear') {
-      return `bg-[linear-gradient(${angle}deg,${gradientColors.map((color, index) => `${color} ${stops[index]}%`).join(',')})]`
+      return `bg-[linear-gradient(${angle}deg,${colorStops})]`
     } else {
-      return `bg-[radial-gradient(circle,${gradientColors.map((color, index) => `${color} ${stops[index]}%`).join(',')})]`
+      return `bg-[radial-gradient(circle,${colorStops})]`
     }
   }, [gradientType, angle, gradientColors, stops])
 
