@@ -4,15 +4,27 @@
 /* eslint-disable prefer-const */
 
 import { useState, useCallback } from 'react'
-import { Paintbrush, Copy, RefreshCw, Plus, Minus } from 'lucide-react'
-import { Button } from "@/components/ui/button"
+import { useToast } from "@/components/ui/use-toast"
+import { ToastProvider, ToastViewport } from "@/components/ui/toast"
+import { Paintbrush, Plus, Minus, Copy, RefreshCw } from 'lucide-react'
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Button } from "@/components/ui/button"
 import { Slider } from "@/components/ui/slider"
 import { Switch } from "@/components/ui/switch"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { useToast } from "@/components/ui/use-toast"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@/components/ui/tabs"
 
 export function ColorMagicComponent() {
   const { toast } = useToast()
@@ -231,235 +243,246 @@ export function ColorMagicComponent() {
   }, [paletteColors, toast])
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white">
-      <header className="bg-gray-800 py-4">
-        <div className="container mx-auto px-4">
-          <h1 className="text-2xl font-bold flex items-center">
-            <Paintbrush className="w-6 h-6 mr-2" />
-            Color Magic
-          </h1>
-        </div>
-      </header>
+    <ToastProvider>
+      <div className="min-h-screen bg-gray-900 text-white">
+        <header className="bg-gray-800 py-4">
+          <div className="container mx-auto px-4">
+            <h1 className="text-2xl font-bold flex items-center font-mono">
+              <Paintbrush className="w-6 h-6 mr-2 " />
+              Color Magic
+            </h1>
+          </div>
+        </header>
 
-      <main className="container mx-auto px-4 py-8">
-        <Tabs defaultValue="gradient" className="space-y-4">
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="gradient">Gradient Generator</TabsTrigger>
-            <TabsTrigger value="palette">Palette Generator</TabsTrigger>
-          </TabsList>
+        <main className="container mx-auto px-4 py-8">
+          <Tabs defaultValue="gradient" className="space-y-4 font-mono">
+            <TabsList className="grid w-full grid-cols-2">
+              <TabsTrigger value="gradient" className='font-semibold'>Gradient Generator</TabsTrigger>
+              <TabsTrigger value="palette" className='font-semibold'>Palette Generator</TabsTrigger>
+            </TabsList>
 
-          <TabsContent value="gradient" className="space-y-4">
-            <div className="h-40 rounded-lg" style={gradientStyle}></div>
+            <TabsContent value="gradient" className="space-y-4">
+              <div className="h-40 rounded-lg" style={gradientStyle}></div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="space-y-4">
-                <Label>Colors</Label>
-                {gradientColors.map((color, index) => (
-                  <div key={index} className="flex items-center space-x-2">
-                    <Input
-                      type="color"
-                      value={color}
-                      onChange={(e) => updateGradientColor(index, e.target.value)}
-                      className="w-12 h-12 p-1 rounded bg-transparent"
-                    />
-                    <Input
-                      type="text"
-                      value={color}
-                      onChange={(e) => updateGradientColor(index, e.target.value)}
-                      className="flex-grow bg-gray-800 text-white"
-                    />
-                    <Slider
-                      value={[stops[index]]}
-                      onValueChange={(value) => updateStop(index, value[0])}
-                      max={100}
-                      step={1}
-                      className="w-24"
-                    />
-                    {gradientColors.length > 2 && (
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => removeGradientColor(index)}
-                        className="text-red-500 hover:text-red-400"
-                      >
-                        <Minus className="h-4 w-4" />
-                      </Button>
-                    )}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-4">
+                  <Label>Colors</Label>
+                  {gradientColors.map((color, index) => (
+                    <div key={index} className="flex items-center space-x-2">
+                      <Input
+                        type="color"
+                        value={color}
+                        onChange={(e) => updateGradientColor(index, e.target.value)}
+                        className="w-12 h-12 p-1 rounded bg-transparent"
+                      />
+                      <Input
+                        type="text"
+                        value={color}
+                        onChange={(e) => updateGradientColor(index, e.target.value)}
+                        className="flex-grow bg-gray-800 text-white"
+                      />
+                      <Slider
+                        value={[stops[index]]}
+                        onValueChange={(value) => updateStop(index, value[0])}
+                        max={100}
+                        step={1}
+                        className="w-24"
+                      />
+                      {gradientColors.length > 2 && (
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => removeGradientColor(index)}
+                          className="text-red-500 bg-white p-3 rounded hover:text-red-400"
+                        >
+                          <Minus className="h-4 w-4" />
+                        </Button>
+                      )}
+                    </div>
+                  ))}
+                  {gradientColors.length < 5 && (
+                    <Button onClick={addGradientColor} variant="outline" className="w-full bg-white text-gray-900">
+                      <Plus className="h-4 w-4 mr-2" />
+                      Add Color
+                    </Button>
+                  )}
+                </div>
+
+                <div className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="gradient-type">Gradient Type</Label>
+                    <Select value={gradientType} onValueChange={setGradientType}>
+                      <SelectTrigger id="gradient-type" className="bg-gray-800 text-white">
+                        <SelectValue placeholder="Select gradient type" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="linear">Linear</SelectItem>
+                        <SelectItem value="radial">Radial</SelectItem>
+                      </SelectContent>
+                    </Select>
                   </div>
-                ))}
-                {gradientColors.length < 5 && (
-                  <Button onClick={addGradientColor} variant="outline" className="w-full bg-white text-gray-900">
-                    <Plus className="h-4 w-4 mr-2" />
-                    Add Color
-                  </Button>
-                )}
+
+                  {gradientType === 'linear' && (
+                    <div className="space-y-2">
+                      <Label htmlFor="angle">Angle (degrees)</Label>
+                      <div className="flex items-center space-x-2">
+                        <Input
+                          id="angle"
+                          type="number"
+                          value={angle}
+                          onChange={(e) => setAngle(Number(e.target.value))}
+                          min="0"
+                          max="360"
+                          className="bg-gray-800 text-white w-20"
+                        />
+                        <div className="relative w-full h-2 bg-gray-300 rounded-full">
+                          <Slider
+                            value={[angle]}
+                            onValueChange={(value) => setAngle(value[0])}
+                            max={360}
+                            step={1}
+                            className="absolute inset-0"
+                            style={{
+                              // Estilos para el track del slider
+                              '--slider-track-background': '#D1D5DB', // Gris claro
+                              '--slider-range-background': '#f4f4f4 ', // Gris claro para la parte activa
+                            } as React.CSSProperties}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  <div className="flex items-center space-x-2">
+                    <Switch
+                      id="repeating"
+                      checked={isRepeating}
+                      onCheckedChange={setIsRepeating}
+                    />
+                    <Label htmlFor="repeating">Repeating Gradient</Label>
+                  </div>
+                </div>
               </div>
 
+              <div className="space-y-2">
+                <Label htmlFor="css-output">CSS Output</Label>
+                <div className="flex space-x-2">
+                  <Input id="css-output"
+                    value={gradientCSS}
+                    readOnly
+                    className="flex-grow bg-gray-800 text-white"
+                  />
+                  <Button onClick={copyGradientCSS} className="flex items-center bg-white text-gray-900 hover:bg-gray-200">
+                    <Copy className="w-4 h-4 mr-2" />
+                    Copy CSS
+                  </Button>
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="tailwind-output">Tailwind Output</Label>
+                <div className="flex space-x-2">
+                  <Input id="tailwind-output"
+                    value={gradientTailwind}
+                    readOnly
+                    className="flex-grow bg-gray-800 text-white"
+                  />
+                  <Button onClick={copyGradientTailwind} className="flex items-center bg-white text-gray-900 hover:bg-gray-100">
+                    <Copy className="w-4 h-4 mr-2" />
+                    Copy Tailwind
+                  </Button>
+                </div>
+              </div>
+
+              <Button onClick={randomizeGradient} variant="outline" className="w-full flex items-center justify-center bg-white text-gray-900">
+                <RefreshCw className="w-4 h-4 mr-2" />
+                Randomize Gradient
+              </Button>
+            </TabsContent>
+
+            <TabsContent value="palette" className="space-y-4">
               <div className="space-y-4">
+                <div className="flex flex-col space-y-2">
+                  <Label>Base Colors</Label>
+                  {baseColors.map((color, index) => (
+                    <div key={index} className="flex items-center space-x-2">
+                      <Input
+                        type="color"
+                        value={color}
+                        onChange={(e) => updateBaseColor(index, e.target.value)}
+                        className="w-12 h-12 p-1 rounded bg-transparent"
+                      />
+                      <Input
+                        type="text"
+                        value={color}
+                        onChange={(e) => updateBaseColor(index, e.target.value)}
+                        className="flex-grow bg-gray-800 text-white"
+                      />
+                      {baseColors.length > 1 && (
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => removeBaseColor(index)}
+                          className="text-red-500 hover:text-red-400 bg-white p-3 rounded hover:bg-gray-200"
+                        >
+                          <Minus className="h-4 w-4" />
+                        </Button>
+                      )}
+                    </div>
+                  ))}
+                  {baseColors.length < 5 && (
+                    <Button onClick={addBaseColor} variant="outline" className="w-full bg-white text-gray-900">
+                      <Plus className="h-4 w-4 mr-2" />
+                      Add Base Color
+                    </Button>
+                  )}
+                </div>
                 <div className="space-y-2">
-                  <Label htmlFor="gradient-type">Gradient Type</Label>
-                  <Select value={gradientType} onValueChange={setGradientType}>
-                    <SelectTrigger id="gradient-type" className="bg-gray-800 text-white">
-                      <SelectValue placeholder="Select gradient type" />
+                  <Label htmlFor="palette-type">Palette Type</Label>
+                  <Select value={paletteType} onValueChange={setPaletteType}>
+                    <SelectTrigger id="palette-type" className="bg-gray-800 text-white">
+                      <SelectValue placeholder="Select palette type" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="linear">Linear</SelectItem>
-                      <SelectItem value="radial">Radial</SelectItem>
+                      <SelectItem value="monochromatic">Monochromatic</SelectItem>
+                      <SelectItem value="analogous">Analogous</SelectItem>
+                      <SelectItem value="complementary">Complementary</SelectItem>
+                      <SelectItem value="triadic">Triadic</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
-
-                {gradientType === 'linear' && (
-                  <div className="space-y-2">
-                    <Label htmlFor="angle">Angle (degrees)</Label>
-                    <div className="flex items-center space-x-2">
-                      <Input
-                        id="angle"
-                        type="number"
-                        value={angle}
-                        onChange={(e) => setAngle(Number(e.target.value))}
-                        min="0"
-                        max="360"
-                        className="bg-gray-800 text-white"
-                      />
-                      <Slider
-                        value={[angle]}
-                        onValueChange={(value) => setAngle(value[0])}
-                        max={360}
-                        step={1}
-                        className="w-full"                      />
+                <Button onClick={() => generatePalette()} className="w-full bg-white text-gray-900 hover:bg-gray-100">Generate Palette</Button>
+                <div className="space-y-4">
+                  {paletteColors.map((palette, index) => (
+                    <div key={index} className="grid grid-cols-5 gap-2">
+                      {palette.map((color, colorIndex) => (
+                        <div key={colorIndex} className="flex flex-col items-center">
+                          <div
+                            className="w-16 h-16 rounded-full"
+                            style={{ backgroundColor: color }}
+                          ></div>
+                          <span className="mt-1 text-xs">{color}</span>
+                        </div>
+                      ))}
                     </div>
-                  </div>
-                )}
-
-                <div className="flex items-center space-x-2">
-                  <Switch
-                    id="repeating"
-                    checked={isRepeating}
-                    onCheckedChange={setIsRepeating}
-                  />
-                  <Label htmlFor="repeating">Repeating Gradient</Label>
+                  ))}
+                </div>
+                <div className="flex space-x-2">
+                  <Button onClick={copyPaletteColors} className="flex-1 flex items-center justify-center bg-white text-gray-900 hover:bg-gray-200">
+                    <Copy className="w-4 h-4 mr-2" />
+                    Copy CSS
+                  </Button>
+                  <Button onClick={copyPaletteTailwind} className="flex-1 flex items-center justify-center bg-white text-gray-900 hover:bg-gray-200">
+                    <Copy className="w-4 h-4 mr-2" />
+                    Copy Tailwind
+                  </Button>
                 </div>
               </div>
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="css-output">CSS Output</Label>
-              <div className="flex space-x-2">
-                <Input id="css-output"
-                  value={gradientCSS}
-                  readOnly
-                  className="flex-grow bg-gray-800 text-white"
-                />
-                <Button onClick={copyGradientCSS} className="flex items-center bg-white text-gray-900 hover:bg-gray-100">
-                  <Copy className="w-4 h-4 mr-2" />
-                  Copy CSS
-                </Button>
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="tailwind-output">Tailwind Output</Label>
-              <div className="flex space-x-2">
-                <Input id="tailwind-output"
-                  value={gradientTailwind}
-                  readOnly
-                  className="flex-grow bg-gray-800 text-white"
-                />
-                <Button onClick={copyGradientTailwind} className="flex items-center bg-white text-gray-900 hover:bg-gray-100 hover:text-white">
-                  <Copy className="w-4 h-4 mr-2" />
-                  Copy Tailwind
-                </Button>
-              </div>
-            </div>
-
-            <Button onClick={randomizeGradient} variant="outline" className="w-full flex items-center justify-center bg-white text-gray-900">
-              <RefreshCw className="w-4 h-4 mr-2" />
-              Randomize Gradient
-            </Button>
-          </TabsContent>
-
-          <TabsContent value="palette" className="space-y-4">
-            <div className="space-y-4">
-              <div className="flex flex-col space-y-2">
-                <Label>Base Colors</Label>
-                {baseColors.map((color, index) => (
-                  <div key={index} className="flex items-center space-x-2">
-                    <Input
-                      type="color"
-                      value={color}
-                      onChange={(e) => updateBaseColor(index, e.target.value)}
-                      className="w-12 h-12 p-1 rounded bg-transparent"
-                    />
-                    <Input
-                      type="text"
-                      value={color}
-                      onChange={(e) => updateBaseColor(index, e.target.value)}
-                      className="flex-grow bg-gray-800 text-white"
-                    />
-                    {baseColors.length > 1 && (
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => removeBaseColor(index)}
-                        className="text-red-500 hover:text-red-400"
-                      >
-                        <Minus className="h-4 w-4" />
-                      </Button>
-                    )}
-                  </div>
-                ))}
-                {baseColors.length < 5 && (
-                  <Button onClick={addBaseColor} variant="outline" className="w-full bg-white text-gray-900">
-                    <Plus className="h-4 w-4 mr-2" />
-                    Add Base Color
-                  </Button>
-                )}
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="palette-type">Palette Type</Label>
-                <Select value={paletteType} onValueChange={setPaletteType}>
-                  <SelectTrigger id="palette-type" className="bg-gray-800 text-white">
-                    <SelectValue placeholder="Select palette type" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="monochromatic">Monochromatic</SelectItem>
-                    <SelectItem value="analogous">Analogous</SelectItem>
-                    <SelectItem value="complementary">Complementary</SelectItem>
-                    <SelectItem value="triadic">Triadic</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <Button onClick={() => generatePalette()} className="w-full bg-white text-gray-900 hover:bg-gray-100">Generate Palette</Button>
-              <div className="space-y-4">
-                {paletteColors.map((palette, index) => (
-                  <div key={index} className="grid grid-cols-5 gap-2">
-                    {palette.map((color, colorIndex) => (
-                      <div key={colorIndex} className="flex flex-col items-center">
-                        <div
-                          className="w-16 h-16 rounded-full"
-                          style={{ backgroundColor: color }}
-                        ></div>
-                        <span className="mt-1 text-xs">{color}</span>
-                      </div>
-                    ))}
-                  </div>
-                ))}
-              </div>
-              <div className="flex space-x-2">
-                <Button onClick={copyPaletteColors} className="flex-1 flex items-center justify-center bg-white text-gray-900">
-                  <Copy className="w-4 h-4 mr-2" />
-                  Copy CSS
-                </Button>
-                <Button onClick={copyPaletteTailwind} className="flex-1 flex items-center justify-center bg-white text-gray-900">
-                  <Copy className="w-4 h-4 mr-2" />
-                  Copy Tailwind
-                </Button>
-              </div>
-            </div>
-          </TabsContent>
-        </Tabs>
-      </main>
-    </div>
+            </TabsContent>
+          </Tabs>
+        </main>
+        <ToastViewport />
+      </div>
+    </ToastProvider>
   )
 }

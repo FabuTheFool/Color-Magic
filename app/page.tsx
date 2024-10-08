@@ -1,5 +1,15 @@
+
+
 import { ColorMagicComponent } from "@/app/Colors/color-magic"
+import { ToastProvider, ToastViewport } from "@/components/ui/toast"
 
 export default function Page() {
-  return <ColorMagicComponent />
+  return (
+    <ToastProvider>
+      <ColorMagicComponent />
+      <ToastViewport />
+    </ToastProvider>
+  )
 }
+
+
