@@ -84,7 +84,13 @@ export function ColorMagicComponent() {
     gradientType === 'linear' ? `${angle}deg` : 'circle'
   }, ${gradientColors.map((color, index) => `${color} ${stops[index]}%`).join(', ')});`
 
-  const gradientTailwind = `bg-gradient-to-r from-[${gradientColors[0]}] to-[${gradientColors[gradientColors.length - 1]}]`
+  const gradientTailwind = useCallback(() => {
+    if (gradientType === 'linear') {
+      return `bg-[linear-gradient(${angle}deg,${gradientColors.map((color, index) => `${color} ${stops[index]}%`).join(',')})]`
+    } else {
+      return `bg-[radial-gradient(circle,${gradientColors.map((color, index) => `${color} ${stops[index]}%`).join(',')})]`
+    }
+  }, [gradientType, angle, gradientColors, stops])
 
   const copyGradientCSS = useCallback(() => {
     navigator.clipboard.writeText(gradientCSS)
@@ -95,7 +101,7 @@ export function ColorMagicComponent() {
   }, [gradientCSS, toast])
 
   const copyGradientTailwind = useCallback(() => {
-    navigator.clipboard.writeText(gradientTailwind)
+    navigator.clipboard.writeText(gradientTailwind())
     toast({
       title: "Gradient Tailwind Copied",
       description: "The gradient Tailwind classes have been copied to your clipboard.",
@@ -413,7 +419,7 @@ export function ColorMagicComponent() {
                 <Label htmlFor="tailwind-output" className="block font-semibold mt-6 mb-2">Tailwind Output</Label>
                 <div className="flex space-x-2">
                   <Input id="tailwind-output"
-                    value={gradientTailwind}
+                    value={gradientTailwind()}
                     readOnly
                     className="flex-grow bg-white dark:bg-gray-800 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-100"
                   />
